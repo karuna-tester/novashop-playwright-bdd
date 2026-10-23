@@ -1,0 +1,64 @@
+name: Nova Shop Playwright BDD
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Playwright BDD (${{ matrix.browser }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
+    env:
+      CI: true
+      BASE_URL: https://www.practiceqaautomation.com/shop
+      SHOP_STANDARD_USER: ${{ secrets.SHOP_STANDARD_USER || 'demo_user' }}
+      SHOP_ADMIN_USER: ${{ secrets.SHOP_ADMIN_USER || 'admin_user' }}
+      SHOP_LOCKED_USER: ${{ secrets.SHOP_LOCKED_USER || 'locked_user' }}
+      SHOP_SLOW_USER: ${{ secrets.SHOP_SLOW_USER || 'slow_user' }}
+      SHOP_BUGGY_USER: ${{ secrets.SHOP_BUGGY_USER || 'buggy_user' }}
+      SHOP_PASSWORD: ${{ secrets.SHOP_PASSWORD }}
+      PW_WORKERS: 2
+      PW_RETRIES: 2
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright browser
+        run: npx playwright install --with-deps ${{ matrix.browser }}
+
+      - name: Generate BDD tests
+        run: npx bddgen
+
+      - name: Run browser suite
+        run: npx playwright test --project=${{ matrix.browser }}
+
+      - name: Upload test reports and diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-${{ matrix.browser }}-${{ github.run_id }}
+          path: |
+            playwright-report/
+            test-results/
+          if-no-files-found: warn
+          retention-days: 14

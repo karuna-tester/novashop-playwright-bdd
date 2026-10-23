@@ -1,0 +1,24 @@
+{
+  "name": "novashop-playwright-bdd",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Nova Shop QA POC - Playwright + Gherkin (playwright-bdd)",
+  "scripts": {
+    "test": "bddgen && playwright test",
+    "test:chromium": "bddgen && playwright test --project=chromium",
+    "test:firefox": "bddgen && playwright test --project=firefox",
+    "test:webkit": "bddgen && playwright test --project=webkit",
+    "test:smoke": "bddgen && playwright test --grep @smoke",
+    "test:regression": "bddgen && playwright test --grep @regression",
+    "test:negative": "bddgen && playwright test --grep @negative",
+    "test:headed": "bddgen && playwright test --headed",
+    "ci": "bddgen && playwright test",
+    "report": "npx playwright show-report",
+    "codegen": "npx playwright codegen https://www.practiceqaautomation.com/shop"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.1",
+    "dotenv": "^16.6.1",
+    "playwright-bdd": "^9.2.1"
+  }
+}
