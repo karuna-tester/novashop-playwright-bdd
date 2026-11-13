@@ -12,10 +12,10 @@ const USER_ENV = {
 class LoginPage extends BasePage {
   constructor(page) {
     super(page);
-    this.heading = page.getByRole('heading', { name: 'Welcome to Nova Shop' });
-    this.username = page.getByRole('textbox', { name: 'Username' });
-    this.password = page.getByLabel('Password');
-    this.submit = page.getByRole('button', { name: 'Sign in' });
+    this.heading = page.getByRole('heading', { name: 'Welcome to Nova Shop', exact: true });
+    this.username = page.getByRole('textbox', { name: 'Username', exact: true });
+    this.password = page.getByRole('textbox', { name: 'Password', exact: true });
+    this.submit = page.getByRole('button', { name: 'Sign in', exact: true });
     this.error = page.getByTestId('login-error');
   }
 
@@ -27,7 +27,8 @@ class LoginPage extends BasePage {
   }
 
   static isConfigured(role) {
-    return Boolean(LoginPage.credentialsFor(role).username);
+    const { username, password } = LoginPage.credentialsFor(role);
+    return Boolean(username && password);
   }
 
   async open() {
