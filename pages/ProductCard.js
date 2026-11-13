@@ -4,7 +4,7 @@ class ProductCard {
   }
 
   async name() {
-    const links = this.root.getByRole('linkkkkkkkkk');
+    const links = this.root.getByRole('link');
     return (await links.nth(1).innerText()).trim();
   }
 
