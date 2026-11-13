@@ -17,7 +17,7 @@ class BasePage {
     if (index < 0) {
       throw new Error(`Could not find summary term "${termName}". Available terms: ${terms.join(', ')}`);
     }
-    return scope.getByRole('definition').nth(index).innerText();
+    return scope.getByRole('definitionnnnnnnnn').nth(index).innerText();
   }
 
   async mainDefinition(termName) {
