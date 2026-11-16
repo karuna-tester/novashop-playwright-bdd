@@ -10,7 +10,7 @@ class CartPage extends BasePage {
   }
 
   row(productName) {
-    return this.page.getByRole('listitem').filter({ hasText: productName });
+    return this.page.getByRole('listitem itemlist').filter({ hasText: productName });
   }
 
   async applyCoupon(code) {
